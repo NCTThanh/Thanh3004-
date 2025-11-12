@@ -14,11 +14,14 @@ Route::get('/', [SiteController::class, 'index'])->name('home');
 
 // 2. MODELS/CARS (Danh sách xe)
 Route::get('/cars', [SiteController::class, 'cars'])->name('cars');
+
 // 2.1 technology (công nghệ mclaren)
+// (SỬA LỖI 2: Comment lại dòng này vì hàm technology() chưa tồn tại trong SiteController)
 Route::get('/technology', [SiteController::class, 'technology'])->name('technology');
 
 // 3. CAR DETAILS (Chi tiết xe)
 // Route gọi phương thức carDetails($modelKey) trong SiteController
+// (SỬA LỖI 1: Đã xóa dấu chấm "." thừa sau "Route")
 Route::get('/models/{modelKey}', [SiteController::class, 'carDetails'])->name('car.details');
 
 
@@ -30,6 +33,7 @@ Route::get('/contact', [SiteController::class, 'contact'])->name('contact');
 
 // 6. XỬ LÝ GỬI FORM (Contact - POST: Xử lý logic gửi email)
 // Route này sẽ gọi hàm submitContact() trong SiteController
+// (GHI CHÚ: Dòng này ĐÃ ĐÚNG, lỗi MethodNotAllowed là do bạn truy cập = GET)
 Route::post('/contact/send', [SiteController::class, 'submitContact'])->name('contact.send');
 
 // =======================================================

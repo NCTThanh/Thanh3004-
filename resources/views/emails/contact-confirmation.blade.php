@@ -23,14 +23,17 @@
             <img src="https://example.com/images/logo-mclaren.png" alt="McLaren VN Logo"> 
         </div>
 
-        <h2>Xin chào {{ $name ?? 'Khách hàng' }}!</h2>
+        {{-- SỬA 1: Đổi $name thành $submission->name --}}
+        <h2>Xin chào {{ $submission->name ?? 'Khách hàng' }}!</h2>
         <p>Cảm ơn bạn đã gửi liên hệ tới McLaren VN. Chúng tôi đã nhận được thông tin và sẽ phản hồi bạn sớm nhất có thể.</p>
         
         <div class="details-box">
-            <p><strong>Chủ đề:</strong> {{ $subject ?? 'Không có chủ đề' }}</p>
+            {{-- SỬA 2: Đổi $subject thành $submission->subject --}}
+            <p><strong>Chủ đề:</strong> {{ $submission->subject ?? 'Không có chủ đề' }}</p>
             <p><strong>Nội dung tin nhắn bạn đã gửi:</strong></p>
-            {{-- Sử dụng nl2br để giữ định dạng xuống dòng của tin nhắn --}}
-            <p style="white-space: pre-line;">{!! nl2br(e($messageBody ?? 'Không có nội dung tin nhắn.')) !!}</p> 
+            
+            {{-- SỬA 3: Đổi $messageBody thành $submission->message --}}
+            <p style="white-space: pre-line;">{!! nl2br(e($submission->message ?? 'Không có nội dung tin nhắn.')) !!}</p> 
         </div>
 
         <p>Trong thời gian chờ đợi, bạn có thể tham khảo thêm về các dòng xe mới nhất của McLaren tại website của chúng tôi.</p>

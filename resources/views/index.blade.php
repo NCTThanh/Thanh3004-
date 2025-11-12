@@ -339,7 +339,7 @@
         <h1>McLaren 750S</h1>
         <p class="d-none d-md-block">Định nghĩa mới về hiệu suất thuần khiết và trải nghiệm lái xe không đối thủ. Đây là chuẩn mực mới.</p>
         {{-- SỬA LỖI: Dùng 'car' thay vì 'model' --}}
-        <a href="{{ route('car.details', ['car' => '750s']) }}" class="btn btn-mclaren btn-lg mt-3" aria-label="Khám Phá 750S">Khám Phá 750S</a>
+        <a href="{{ route('car.details', ['modelKey' => '750s']) }}" class="btn btn-mclaren btn-lg mt-3" aria-label="Khám Phá 750S">Khám Phá 750S</a>
     </div>
 </section>
 
@@ -359,7 +359,7 @@
                             <h5 class="card-title">McLaren 750S</h5>
                             <p class="card-text flex-grow-1">Sự tiến hóa của một huyền thoại. Nhẹ nhất, mạnh nhất trong series.</p>
                             {{-- SỬA LỖI: Dùng 'car' thay vì 'model' --}}
-                            <a href="{{ route('car.details', ['car' => '750s']) }}" class="btn btn-mclaren-outline mt-auto">Xem chi tiết</a>
+                            <a href="{{ route('car.details', ['modelKey' => '750s']) }}" class="btn btn-mclaren-outline mt-auto">Xem chi tiết</a>
                         </div>
                     </div>
                 </div>
@@ -370,7 +370,7 @@
                             <h5 class="card-title">McLaren Artura</h5>
                             <p class="card-text flex-grow-1">Cách mạng hybrid. Hiệu suất điện khí hóa thế hệ mới.</p>
                             {{-- SỬA LỖI: Dùng 'car' thay vì 'model' --}}
-                            <a href="{{ route('car.details', ['car' => 'artura']) }}" class="btn btn-mclaren-outline mt-auto">Xem chi tiết</a>
+                            <a href="{{ route('car.details', ['modelKey' => 'artura']) }}" class="btn btn-mclaren-outline mt-auto">Xem chi tiết</a>
                         </div>
                     </div>
                 </div>
@@ -381,7 +381,7 @@
                             <h5 class="card-title">McLaren GTS</h5>
                             <p class="card-text flex-grow-1">Sang trọng, linh hoạt. Một con quái thú trong làng siêu xe.</p>
                             {{-- SỬA LỖI: Dùng 'car' thay vì 'model'. *Lưu ý: GTS không có trong data mẫu, dùng gt nếu cần* --}}
-                            <a href="{{ route('car.details', ['car' => 'gt']) }}" class="btn btn-mclaren-outline mt-auto">Xem chi tiết</a>
+                            <a href="{{ route('car.details', ['modelKey' => 'gt']) }}" class="btn btn-mclaren-outline mt-auto">Xem chi tiết</a>
                         </div>
                     </div>
                 </div>
@@ -443,7 +443,7 @@
 
             </div> <div class="showcase-cta reveal">
                 {{-- SỬA LỖI: Dùng 'car' thay vì 'model' --}}
-                   <a href="{{ route('car.details', ['car' => '600lt']) }}" class="btn-link-arrow">
+                   <a href="{{ route('car.details', ['modelKey' => '600lt']) }}" class="btn-link-arrow">
                     Tìm hiểu chi tiết về 600LT <i class="fas fa-arrow-right"></i>
                 </a>
             </div>

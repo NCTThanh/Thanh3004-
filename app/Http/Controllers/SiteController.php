@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session; // Đảm bảo sử dụng Session
 use App\Mail\ContactMail;                 // Mailable gửi admin
 use App\Mail\ContactConfirmationMail;     // Mailable gửi khách
+use App\Models\ContactSubmission;
 
 class SiteController extends Controller
 {
@@ -51,11 +52,15 @@ class SiteController extends Controller
     {
         return view('contact');
     }
+    public function technology()
+    {
+        return view('technology');
+    }
 
     /**
      * Xử lý form liên hệ và gửi mail
      */
-    public function submitContact(Request $request)
+   public function submitContact(Request $request)
     {
         // 1. Validate dữ liệu
         $validatedData = $request->validate([
@@ -66,30 +71,32 @@ class SiteController extends Controller
             'message' => 'required',
         ]);
 
-        // 2. Thiết lập người nhận Admin
-        $adminEmail = env('MAIL_TO_ADDRESS', 'thanhdayroi3004@gmail.com'); 
+        $adminEmail = env('MAIL_TO_ADDRESS', 'thanhdayroi3004@gmail.com');
 
         try {
-            // Gửi mail cho Admin
-            Mail::to($adminEmail)->send(new ContactMail($validatedData));
+            // BƯỚC 2: LƯU VÀO DATABASE ĐẦU TIÊN
+            $submission = ContactSubmission::create($validatedData); // <--- THÊM DÒNG NÀY
+
+            // Gửi mail cho Admin (dùng $submission an toàn hơn)
+            Mail::to($adminEmail)->send(new ContactMail($submission));
 
             // Gửi mail xác nhận cho Khách hàng
-            Mail::to($validatedData['email'])->send(new ContactConfirmationMail($validatedData));
+            Mail::to($submission->email)->send(new ContactConfirmationMail($submission));
 
-            // Trả về thông báo thành công (Flash Session)
+            // Trả về thông báo thành công
             return redirect()->back()
                 ->with('success', 'Cảm ơn bạn! Tin nhắn đã gửi thành công. Một bản xác nhận đã được gửi tới email của bạn.');
 
         } catch (\Exception $e) {
-            // Ghi log lỗi chi tiết (Fatal Error, SMTP Authentication)
-            Log::error('LỖI SERVER GỬI EMAIL TỪ FORM LIÊN HỆ: ' . $e->getMessage(), [
+            // Ghi log lỗi
+            Log::error('LỖI KHI GỬI FORM LIÊN HỆ: ' . $e->getMessage(), [
                 'form_data' => $validatedData
             ]);
 
-            // Trả về thông báo lỗi, giữ lại input để người dùng không phải nhập lại
+            // Trả về thông báo lỗi
             return redirect()->back()
                 ->withInput($request->except(['_token']))
-                ->with('error', 'Thất bại! Gửi tin nhắn thất bại do lỗi máy chủ (Lỗi SMTP). Vui lòng kiểm tra lại.');
+                ->with('error', 'Thất bại! Không thể gửi tin nhắn. Vui lòng thử lại sau.');
         }
     }
 }

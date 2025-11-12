@@ -2,50 +2,66 @@
 
 namespace App\Mail;
 
+use App\Models\ContactSubmission; // <-- THÊM DÒNG NÀY
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
+use Illuminate\Mail\Mailables\Content;
+use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Contracts\Queue\ShouldQueue; // Thêm nếu bạn muốn dùng Queue
 
-class ContactMail extends Mailable // implements ShouldQueue // Thêm implements ShouldQueue nếu dùng Queue
+class ContactMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    // Khai báo các thuộc tính công khai. Laravel sẽ tự động truyền chúng vào view.
-    public $name;
-    public $email;
-    public $phone;
-    public $subject; // Đổi tên công khai thành $subject để dễ dùng trong view
-    public $messageBody; // Giữ nguyên $messageBody để tránh xung đột với $message của PHP/Laravel
+    /**
+     * Dữ liệu liên hệ (dưới dạng Model Object).
+     * Phải là 'public' để view có thể thấy.
+     */
+    public ContactSubmission $submission; // <-- SỬA 1: Khai báo public property
 
     /**
      * Khởi tạo một đối tượng Mailable mới.
      *
-     * @param array $data Dữ liệu đã được validate từ form liên hệ.
+     * @param ContactSubmission $submission Dữ liệu đã được validate và lưu
      * @return void
      */
-    public function __construct(array $data)
+    public function __construct(ContactSubmission $submission) // <-- SỬA 2: Đổi (array $data)
     {
-        // Ánh xạ dữ liệu form vào các thuộc tính công khai
-        $this->name = $data['name'];
-        $this->email = $data['email'];
-        $this->phone = $data['phone'] ?? null;
-        
-        // CẬP NHẬT: Sử dụng $data['subject'] -> $this->subject
-        $this->subject = $data['subject']; 
-        $this->messageBody = $data['message']; 
+        $this->submission = $submission; // <-- SỬA 3: Gán object
     }
 
     /**
-     * Xây dựng mail message (Gửi cho Admin).
-     *
-     * @return $this
+     * Lấy envelope (tiêu đề, người gửi) của mail.
      */
-    public function build()
+    public function envelope(): Envelope
     {
-        // SỬA LỖI: Đổi tên view từ 'emails.contact-admin' sang 'emails.contact'
-        // để khớp với file contact.blade.php hiện có trong thư mục views/emails.
-        return $this->subject('[YÊU CẦU LIÊN HỆ MỚI] ' . $this->subject)
-                    ->view('emails.contact'); 
+        return new Envelope(
+            // Trả lời thư này sẽ đi đến email của khách
+            replyTo: $this->submission->email,
+            // Tiêu đề mail cho Admin
+            subject: 'Tin nhắn Liên hệ Mới: ' . $this->submission->subject,
+        );
+    }
+
+    /**
+     * Lấy nội dung mail (view).
+     */
+    public function content(): Content
+    {
+        return new Content(
+            // Đảm bảo bạn có file view này:
+            // resources/views/emails/contact-admin.blade.php
+            view: 'emails.contact-admin',
+            // Dữ liệu $submission sẽ tự động được truyền vào view
+        );
+    }
+
+    /**
+     * Lấy file đính kèm (nếu có).
+     */
+    public function attachments(): array
+    {
+        return [];
     }
 }

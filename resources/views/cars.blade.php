@@ -193,7 +193,7 @@
                             <div class="car-listing-footer">
                                 <div class="car-price"><span>Từ</span> $324,000</div>
                                 {{-- SỬA LỖI: Thay 'model' bằng 'car' --}}
-                                <a href="{{ route('car.details', ['car' => '750s']) }}" class="btn btn-mclaren-outline">Xem Chi Tiết</a>
+                                <a href="{{ route('car.details', ['modelKey' => '750s']) }}" class="btn btn-mclaren-outline">Xem Chi Tiết</a>
                             </div>
                         </div>
                     </div>
@@ -215,7 +215,7 @@
                             <div class="car-listing-footer">
                                 <div class="car-price"><span>Từ</span> $237,500</div>
                                 {{-- SỬA LỖI: Thay 'model' bằng 'car' --}}
-                                <a href="{{ route('car.details', ['car' => 'artura']) }}" class="btn btn-mclaren-outline">Xem Chi Tiết</a>
+                                <a href="{{ route('car.details', ['modelKey' => 'artura']) }}" class="btn btn-mclaren-outline">Xem Chi Tiết</a>
                             </div>
                         </div>
                     </div>
@@ -237,7 +237,7 @@
                             <div class="car-listing-footer">
                                 <div class="car-price"><span>Từ</span> $220,000</div>
                                 {{-- SỬA LỖI: Thay 'model' bằng 'car'. (Và dùng 'gt' để khớp với data trong car-details) --}}
-                                <a href="{{ route('car.details', ['car' => 'gt']) }}" class="btn btn-mclaren-outline">Xem Chi Tiết</a>
+                                <a href="{{ route('car.details', ['modelKey' => 'gt']) }}" class="btn btn-mclaren-outline">Xem Chi Tiết</a>
                             </div>
                         </div>
                     </div>
@@ -259,7 +259,7 @@
                             <div class="car-listing-footer">
                                 <div class="car-price"><span>Từ</span> $1,000,000+</div>
                                 {{-- SỬA LỖI: Thay 'model' bằng 'car' --}}
-                                <a href="{{ route('car.details', ['car' => 'senna']) }}" class="btn btn-mclaren-outline">Xem Chi Tiết</a>
+                                <a href="{{ route('car.details', ['modelKey' => 'senna']) }}" class="btn btn-mclaren-outline">Xem Chi Tiết</a>
                             </div>
                         </div>
                     </div>
