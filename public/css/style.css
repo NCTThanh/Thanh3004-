@@ -5,8 +5,8 @@
     --color-mclaren-orange: #FF7E00;
     --color-mclaren-orange-dark: #B80022;
     --color-background: #0A0A0A;
-    --color-surface: #1C1C1C; /* Đậm hơn surface cũ */
-    --color-surface-light: #0A0A0A; /* Bề mặt cho card */
+    --color-surface: #1C1C1C; 
+    --color-surface-light: #0A0A0A;
     --color-border: #0A0A0A;
     --color-text-primary: #FFFFFF;
     --color-text-secondary: #AAAAAA;
@@ -20,7 +20,7 @@ body {
     line-height: 1.7;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    /* Hiệu ứng chuyển đổi tổng thể mượt mà */
+   
     transition: background-color 0.4s ease;
 }
 
@@ -37,7 +37,7 @@ a {
 }
 
 a:hover {
-    color: #ff9f33; /* Sửa lại từ CSS cũ của bạn */
+    color: #ff9f33; 
 }
 
 /* =================================================================
@@ -86,7 +86,7 @@ a:hover {
 .navbar-brand .brand-text {
     font-size: 1.8rem;
     font-weight: 900;
-    color: var(--color-mclaren-orange); /* Đổi màu thương hiệu sang cam */
+    color: var(--color-mclaren-orange); 
     letter-spacing: 1px;
     text-transform: uppercase;
 }
@@ -111,7 +111,7 @@ a:hover {
     width: 0;
     height: 2px;
     background-color: var(--color-mclaren-orange);
-    transition: width 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94); /* Hiệu ứng mượt mà hơn */
+    transition: width 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .navbar-nav .nav-link:hover,
@@ -125,7 +125,7 @@ a:hover {
     width: 80%;
 }
 .main-container {
-    padding-top: 80px; /* Đảm bảo nội dung không bị che khuất bởi navbar */
+    padding-top: 80px; 
 } 
 
 /* Biểu tượng Nhà bán lẻ */
@@ -149,7 +149,7 @@ a:hover {
     justify-content: center;
     text-align: center;
     overflow: hidden;
-    color: var(--color-text-primary); /* Đảm bảo màu chữ trắng */
+    color: var(--color-text-primary); 
 }
 
 .video-overlay {
@@ -164,13 +164,13 @@ a:hover {
     position: absolute;
     top: 0; left: 0;
     width: 100%; height: 100%;
-    background: linear-gradient(to top, rgba(10,10,10,0.9), transparent 60%); /* Làm tối hơn ở dưới */
+    background: linear-gradient(to top, rgba(10,10,10,0.9), transparent 60%); 
 }
 
 .video-overlay video {
     width: 100%; height: 100%;
     object-fit: cover;
-    filter: brightness(0.7); /* Giảm độ sáng video */
+    filter: brightness(0.7); 
 }
 
 .hero-text-container {
@@ -186,7 +186,7 @@ a:hover {
 }
 
 .hero-section .button {
-    /* Đổi sang sử dụng class chung .btn-mclaren */
+    
     z-index: 10;
     margin-top: 2rem;
     padding: 1rem 3.5rem;
@@ -198,7 +198,7 @@ a:hover {
     text-transform: uppercase;
     transition: all 0.3s ease;
     animation: fadeInUp 1s ease-out 0.5s forwards;
-    opacity: 0; /* Bắt đầu ẩn */
+    opacity: 0; 
 }
 
 .hero-section .button:hover {
@@ -229,7 +229,7 @@ a:hover {
 }
 .mclaren-card:hover {
     transform: translateY(-8px);
-    box-shadow: 0 20px 40px rgba(228, 0, 43, 0.3); /* Hiệu ứng bóng cam */
+    box-shadow: 0 20px 40px rgba(228, 0, 43, 0.3); 
 }
 .mclaren-card .card-img-top {
     height: 250px;
@@ -252,7 +252,7 @@ a:hover {
     color: var(--color-text-secondary);
 }
 .mclaren-card .btn-primary {
-    /* Sử dụng class chung */
+   
     transition: all 0.3s ease;
 }
 
@@ -264,7 +264,7 @@ a:hover {
 }
 .cars-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); /* Responsive grid */
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
     gap: 30px;
     padding: 20px 0;
 }
@@ -327,15 +327,15 @@ a:hover {
 }
 #main-car-image {
     width: 100%;
-    aspect-ratio: 16 / 9; /* Giữ tỷ lệ 16:9 cho ảnh chính */
+    aspect-ratio: 16 / 9; 
     object-fit: cover;
     border-radius: 8px;
     margin-bottom: 20px;
     box-shadow: 0 5px 15px rgba(0,0,0,0.5);
-    transition: opacity 0.3s ease, transform 0.3s ease; /* Thêm chuyển động mượt mà */
+    transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
-/* Hiệu ứng mờ khi chuyển ảnh (sẽ được thêm trong JS) */
+
 .image-transition-active {
     opacity: 0.6;
     transform: scale(0.98);
@@ -439,9 +439,7 @@ a:hover {
     box-shadow: 0 0 0 0.25rem rgba(228, 0, 43, 0.25);
     background-color: var(--color-surface-light);
 }
-/* .btn-contact { (Phần @extend .btn-mclaren; là SASS, không phải CSS thuần) */
-    /* Bạn sẽ cần dùng class="btn-mclaren" trực tiếp trong HTML */
-/* } */
+
 .map-container {
     height: 500px;
     border-radius: 12px;
@@ -520,7 +518,7 @@ a:hover {
 /* Responsive adjustments */
 @media (max-width: 991px) {
     .navbar-nav .nav-link::after {
-        width: 0; /* Ẩn gạch chân trên mobile để tiết kiệm không gian */
+        width: 0; 
     }
     .navbar-nav .nav-link {
         text-align: center;

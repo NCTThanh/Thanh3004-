@@ -20,9 +20,8 @@
 <body>
     <div class="container">
         <div class="logo">
-            {{-- Đảm bảo bạn có thể truy cập asset này. Nếu gửi mail thật, bạn nên dùng URL tuyệt đối --}}
-            {{-- <img src="{{ asset('images/logo-mclaren.png') }}" alt="McLaren VN Logo"> --}}
-             <img src="https://i.imgur.com/your-logo-url.png" alt="McLaren VN Logo"> {{-- Ví dụ URL tuyệt đối --}}
+           
+             <img src="https://i.imgur.com/your-logo-url.png" alt="McLaren VN Logo">
         </div>
 
         <h2>Tin Nhắn Liên Hệ Mới</h2>
@@ -31,29 +30,29 @@
         <table class="content-table">
             <tr>
                 <td class="label">Tên:</td>
-                {{-- SỬA 1: Đổi $name thành $submission->name --}}
+              
                 <td>{{ $submission->name }}</td>
             </tr>
             <tr>
                 <td class="label">Email:</td>
-                {{-- SỬA 2: Đổi $email thành $submission->email --}}
+                
                 <td>{{ $submission->email }}</td>
             </tr>
             <tr>
                 <td class="label">Điện thoại:</td>
-                {{-- SỬA 3: Đổi $phone thành $submission->phone --}}
+                
                 <td>{{ $submission->phone ?? 'Chưa cung cấp' }}</td>
             </tr>
              <tr>
                 <td class="label">Chủ đề:</td>
-                {{-- SỬA 4: Thêm $submission->subject --}}
+                
                 <td>{{ $submission->subject }}</td>
             </tr>
         </table>
 
         <h4 style="margin-top: 20px;">Nội dung tin nhắn:</h4>
         <div class="message-content">
-             {{-- SỬA 5: Đổi $messageBody thành $submission->message (và dùng nl2br) --}}
+           
             {!! nl2br(e($submission->message)) !!}
         </div>
 

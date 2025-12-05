@@ -8,7 +8,7 @@
                     </a>
                 </div>
 
-                {{-- Giữ nguyên Navigation Links của Dashboard --}}
+                
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
@@ -78,13 +78,13 @@
             </x-responsive-nav-link>
         </div>
 
-        {{-- KHỐI CÓ THỂ GÂY LỖI: CẦN BAO BỌC BẰNG @auth --}}
+        
         @auth
         <div class="pt-4 pb-1 border-t border-gray-200 dark:border-gray-600">
             <div class="px-4">
-                {{-- SỬA LỖI: Thêm ?-> cho truy cập name --}}
+                
                 <div class="font-medium text-base text-gray-800 dark:text-gray-200">{{ Auth::user()?->name }}</div>
-                {{-- SỬA LỖI: Thêm ?-> cho truy cập email --}}
+                
                 <div class="font-medium text-sm text-gray-500">{{ Auth::user()?->email }}</div> 
             </div>
 

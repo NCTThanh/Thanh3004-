@@ -2,7 +2,7 @@
 
 namespace App\Mail;
 
-use App\Models\ContactSubmission; // <-- THÊM DÒNG NÀY
+use App\Models\ContactSubmission; 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -17,7 +17,7 @@ class ContactConfirmationMail extends Mailable
     /**
      * Dữ liệu liên hệ (dưới dạng Model Object).
      */
-    public ContactSubmission $submission; // <-- SỬA 1
+    public ContactSubmission $submission; 
 
     /**
      * Khởi tạo một đối tượng Mailable mới.
@@ -25,9 +25,9 @@ class ContactConfirmationMail extends Mailable
      * @param ContactSubmission $submission Dữ liệu đã được validate và lưu
      * @return void
      */
-    public function __construct(ContactSubmission $submission) // <-- SỬA 2
+    public function __construct(ContactSubmission $submission) 
     {
-        $this->submission = $submission; // <-- SỬA 3
+        $this->submission = $submission; 
     }
 
     /**
@@ -47,10 +47,9 @@ class ContactConfirmationMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            // Đảm bảo bạn có file view này:
-            // resources/views/emails/contact-confirmation.blade.php
+           
             view: 'emails.contact-confirmation',
-            // Dữ liệu $submission sẽ tự động được truyền vào view
+            
         );
     }
 

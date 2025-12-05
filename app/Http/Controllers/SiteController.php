@@ -5,98 +5,159 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Session; // Đảm bảo sử dụng Session
-use App\Mail\ContactMail;                 // Mailable gửi admin
-use App\Mail\ContactConfirmationMail;     // Mailable gửi khách
-use App\Models\ContactSubmission;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Auth; 
+
+// CÁC MODELS CẦN THIẾT
+use App\Models\Car; 
+use App\Models\Retailer; 
+use App\Models\Timeline; 
+use App\Models\Event; 
+use App\Models\ContactSubmission; 
+
+// CÁC MAILABLES
+use App\Mail\ContactMail; 
+use App\Mail\ContactConfirmationMail; 
 
 class SiteController extends Controller
 {
     /**
-     * Hiển thị trang chủ
+     * TRANG CHỦ
      */
     public function index()
     {
-        return view('index');
+        
+        $featuredCars = Car::latest()->take(3)->get();
+        
+       
+        $heroCar = Car::where('model_key', '750s')->first();
+
+        return view('index', compact('featuredCars', 'heroCar'));
     }
 
     /**
-     * Hiển thị danh sách xe
+     * TRANG DANH SÁCH XE
      */
     public function cars()
     {
-        return view('cars');
+        $cars = Car::all(); 
+        return view('cars', compact('cars'));
     }
 
     /**
-     * Hiển thị trang chi tiết xe
+     * TRANG CHI TIẾT XE
      */
-    public function carDetails($model)
+    public function carDetails($modelKey)
     {
-        return view('car-details', ['modelKey' => $model]); 
+        $car = Car::where('model_key', $modelKey)->firstOrFail();
+        return view('car-details', compact('car'));
     }
 
     /**
-     * Hiển thị trang nhà bán lẻ
+     * TRANG NHÀ BÁN LẺ (DYNAMIC)
      */
     public function retailers()
     {
+        
+        $retailers = Retailer::all();
         $mapApiKey = env('GOOGLE_MAPS_API_KEY', '');
-        return view('retailers', compact('mapApiKey'));
+        
+
+        return view('retailers', compact('retailers', 'mapApiKey'));
     }
 
     /**
-     * Hiển thị form liên hệ
+     * TRANG DI SẢN (HERITAGE - DYNAMIC)
      */
-    public function contact()
+    public function heritage()
     {
-        return view('contact');
+        
+        $timelines = Timeline::orderBy('year', 'asc')->get();
+        
+    
+        return view('heritage', compact('timelines'));
     }
-    public function technology()
+    
+
+    /**
+     * TRANG TRẢI NGHIỆM (EXPERIENCE - DYNAMIC)
+     */
+    public function experience()
     {
-        return view('technology');
+        // Lấy toàn bộ sự kiện từ Database
+        $events = Event::all();
+        
+        // Truyền biến $events vào View
+        return view('experience', compact('events'));
     }
 
     /**
-     * Xử lý form liên hệ và gửi mail
+     * CÁC TRANG TĨNH KHÁC
      */
-   public function submitContact(Request $request)
+    public function contact() { return view('contact'); }
+    public function technology() { return view('technology'); }
+    public function mso() { return view('mso'); }
+
+    /**
+     * XỬ LÝ FORM LIÊN HỆ - CHỈ DÀNH CHO USER ĐÃ ĐĂNG NHẬP
+     * Đổi tên từ submitContact thành send.
+     */
+    public function send(Request $request)
     {
-        // 1. Validate dữ liệu
+        
+        if (!Auth::check()) {
+            return redirect()->route('login')->with('error', 'Vui lòng đăng nhập để gửi yêu cầu liên hệ.');
+        }
+
+       
+        $user = Auth::user();
+
+        
         $validatedData = $request->validate([
-            'name'    => 'required|max:255',
-            'email'   => 'required|email',
-            'phone'   => 'nullable|max:20',
+        
+            'phone'   => 'required|max:20', 
             'subject' => 'required|max:255',
             'message' => 'required',
+        ]);
+
+      
+        $submissionData = array_merge($validatedData, [
+            'user_id' => $user->id,
+            'name'    => $user->name,
+            'email'   => $user->email,
         ]);
 
         $adminEmail = env('MAIL_TO_ADDRESS', 'thanhdayroi3004@gmail.com');
 
         try {
-            // BƯỚC 2: LƯU VÀO DATABASE ĐẦU TIÊN
-            $submission = ContactSubmission::create($validatedData); // <--- THÊM DÒNG NÀY
+            
+            $submission = ContactSubmission::create($submissionData); 
 
-            // Gửi mail cho Admin (dùng $submission an toàn hơn)
-            Mail::to($adminEmail)->send(new ContactMail($submission));
+           
+            try {
+                Mail::to($adminEmail)->send(new ContactMail($submission));
+            } catch (\Exception $e) {
+                Log::error('Mail Admin Error: ' . $e->getMessage());
+            }
 
-            // Gửi mail xác nhận cho Khách hàng
-            Mail::to($submission->email)->send(new ContactConfirmationMail($submission));
+           
+            try {
+                Mail::to($submission->email)->send(new ContactConfirmationMail($submission));
+            } catch (\Exception $e) {
+                Log::error('Mail Client Error: ' . $e->getMessage());
+            }
 
-            // Trả về thông báo thành công
             return redirect()->back()
-                ->with('success', 'Cảm ơn bạn! Tin nhắn đã gửi thành công. Một bản xác nhận đã được gửi tới email của bạn.');
+                ->with('success', 'Cảm ơn bạn! Tin nhắn đã gửi thành công. Chúng tôi sẽ liên hệ lại sớm nhất.');
 
         } catch (\Exception $e) {
-            // Ghi log lỗi
             Log::error('LỖI KHI GỬI FORM LIÊN HỆ: ' . $e->getMessage(), [
-                'form_data' => $validatedData
+                'form_data' => $submissionData
             ]);
 
-            // Trả về thông báo lỗi
             return redirect()->back()
                 ->withInput($request->except(['_token']))
-                ->with('error', 'Thất bại! Không thể gửi tin nhắn. Vui lòng thử lại sau.');
+                ->with('error', 'Thất bại! Có lỗi xảy ra. Vui lòng thử lại sau.');
         }
     }
 }

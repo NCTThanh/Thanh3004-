@@ -1,557 +1,222 @@
 @extends('layouts.app')
 
-@section('title', 'Trang Chủ Chính Thức - McLaren')
+@section('title', 'McLaren Việt Nam - Official')
 
 @push('styles')
 <style>
-    /* (SỬA LỖI) Kéo section lên đụng header */
-    .main-container {
-        padding-top: 0 !important;
+    .main-container { padding-top: 0 !important; }
+    .section-gap { padding: 120px 0; }
+
+    /* --- HERO SECTION (CINEMATIC) --- */
+    .hero-wrap { position: relative; height: 100vh; width: 100%; overflow: hidden; }
+    #hero-bg {
+        position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+        animation: slowZoom 30s infinite alternate; filter: brightness(0.9);
     }
-
-    /* (SỬA LỖI) Thêm khoảng cách cho section đầu tiên sau hero */
-    .featured-models-section {
-        /* Bạn có thể thay đổi giá trị này */
-        padding-top: 150px !important; 
+    @keyframes slowZoom { from { transform: scale(1); } to { transform: scale(1.15); } }
+    
+    .hero-shade { position: absolute; inset: 0; background: linear-gradient(to top, #000 0%, transparent 50%); }
+    .hero-txt {
+        position: absolute; bottom: 15%; left: 5%; z-index: 2; color: #fff; max-width: 900px;
+        opacity: 0; transform: translateY(30px); animation: fadeUp 1s ease forwards 0.5s;
     }
+    @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
 
-    /* Biến màu (giữ nguyên từ style.css) */
-    :root {
-        --color-mclaren-orange: #FF7E00;
-        --color-background: #0A0A0A;
-        --color-surface: #1C1C1C;
-        --color-border: #333333;
-        --color-text-primary: #FFFFFF;
-        --color-text-secondary: #AAAAAA;
+    .hero-h1 { font-size: clamp(4rem, 8vw, 7rem); font-weight: 900; text-transform: uppercase; line-height: 0.9; margin-bottom: 20px; letter-spacing: -2px; }
+    .hero-sub { color: #FF7E00; font-weight: 700; letter-spacing: 4px; text-transform: uppercase; margin-bottom: 15px; display: block; font-size: 0.9rem; }
+
+    /* --- LUXURY CARDS --- */
+    .lux-card {
+        background: #0a0a0a; border: none; height: 100%; transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+        position: relative; overflow: hidden; border-bottom: 1px solid #222;
     }
+    .lux-card:hover { transform: translateY(-15px); border-bottom-color: #FF7E00; box-shadow: 0 30px 60px rgba(0,0,0,0.9); }
+    .lux-card img { width: 100%; height: 320px; object-fit: cover; transition: 0.6s; filter: grayscale(30%); }
+    .lux-card:hover img { transform: scale(1.05); filter: grayscale(0%); }
+    
+    .card-body { padding: 2rem; }
+    .card-title { color: #fff; font-weight: 800; text-transform: uppercase; font-size: 1.6rem; margin-bottom: 10px; }
+    .card-desc { color: #888; font-size: 0.95rem; line-height: 1.6; margin-bottom: 25px; min-height: 50px; font-weight: 300; }
 
-    /* ============================================= */
-    /* 1. CSS HERO VIDEO/IMAGE (ĐÃ SỬA LỖI FULL-SCREEN) */
-    /* ============================================= */
-   /* Hero Section */
-.hero-section {
-    position: relative;
-    width: 100%;
-    height: 100vh;
-    overflow: hidden;
-}
+    /* --- BUTTONS --- */
+    .btn-mc {
+        background: #FF7E00; color: #fff; border: none; padding: 15px 45px;
+        text-transform: uppercase; font-weight: 700; letter-spacing: 2px; transition: 0.3s;
+        text-decoration: none; display: inline-block; font-size: 0.9rem;
+    }
+    .btn-mc:hover { background: #fff; color: #000; }
+    
+    .btn-outline-mc {
+        border: 1px solid #444; color: #fff; padding: 12px 20px; text-transform: uppercase; letter-spacing: 2px;
+        width: 100%; display: block; text-align: center; text-decoration: none; transition: 0.3s; font-size: 0.8rem;
+    }
+    .btn-outline-mc:hover { border-color: #FF7E00; background: #FF7E00; color: #fff; }
 
-/* Nền ảnh/video */
-.hero-section img {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    z-index: 0;
-}
-
-/* Lớp phủ tối */
-.hero-overlay {
-    position: absolute;
-    inset: 0;
-    background: rgba(0,0,0,0.4);
-    z-index: 1;
-}
-
-/* Chữ đè lên ảnh */
-.hero-content {
-    position: absolute;
-    bottom: 8%;
-    left: 5%;
-    color: #fff;
-    z-index: 2; /* cao nhất */
-    max-width: 600px;
-    text-shadow: 0 4px 10px rgba(0,0,0,0.8);
-}
-
-.hero-content h1 {
-    font-size: 3rem;
-    margin-bottom: 0.5rem;
-}
-
-.hero-content p {
-    font-size: 1.2rem;
-    margin-bottom: 1rem;
-}
-
-.hero-content a {
-    display: inline-block;
-    background: #ff7f00;
-    color: #fff;
-    padding: 10px 24px;
-    border-radius: 8px;
-    text-decoration: none;
-    transition: 0.3s;
-}
-
-.hero-content a:hover {
-    background: #ff9933;
-}
-
-    /* ============================================= */
-    /* 2. KHU VỰC 3D SHOWCASE */
-    /* ============================================= */
-    .interactive-3d-showcase {
-        padding: 120px 0; /* Giữ padding chuẩn */
-        background-color: #000000;
+    /* --- 3D SECTION --- */
+    .section-3d-black {
+        background-color: #000000 !important;
+        padding: 100px 0;
         position: relative;
     }
-    .showcase-title-container {
-        text-align: center;
-        margin-bottom: 80px;
-    }
-    .showcase-title-container .tagline {
-        font-size: 1.1rem;
-        font-weight: 600;
-        color: var(--color-mclaren-orange);
-        letter-spacing: 2px;
-        text-transform: uppercase;
-    }
-    .showcase-title-container h2 {
-        font-size: clamp(2.5rem, 5vw, 4.5rem);
-        font-weight: 900;
-        color: var(--color-text-primary);
-        line-height: 1.1;
-        margin-top: 1rem;
-    }
-    .model-viewer-wrapper {
-        height: 70vh;
-        min-height: 500px;
-        border-radius: 12px;
-        position: relative;
-    }
-    model-viewer {
-        width: 100%;
-        height: 100%;
-        --progress-bar-color: var(--color-mclaren-orange);
-        --poster-color: transparent;
-        background-color: #000;
-        border-radius: 12px;
-    }
-    
-    .feature-column {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        height: 100%;
-    }
-    .feature-item {
-        margin-bottom: 3rem;
-        padding: 1.5rem;
-        border-radius: 8px;
-        background-color: rgba(28, 28, 28, 0.5);
-        border: 1px solid var(--color-border);
-    }
-    .feature-item .icon {
-        font-size: 2rem;
-        color: var(--color-mclaren-orange);
-        margin-bottom: 1rem;
-    }
-    .feature-item h4 {
-        font-size: 1.3rem;
-        font-weight: 700;
-        color: var(--color-text-primary);
-        margin-bottom: 0.5rem;
-    }
-    .feature-item p {
-        color: var(--color-text-secondary);
-        font-size: 0.95rem;
-        line-height: 1.6;
-    }
-    .feature-item.align-right {
-        text-align: right;
-    }
-    .feature-column.right-col {
-        align-items: flex-end;
-    }
-    .showcase-cta {
-        text-align: center;
-        margin-top: 80px;
-    }
-    .btn-link-arrow {
-        color: var(--color-mclaren-orange);
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        display: inline-block;
-        font-size: 1.2rem;
-        transition: transform 0.3s ease, color 0.3s ease;
-    }
-    .btn-link-arrow:hover {
-        color: #ff9f33;
-        transform: translateX(5px);
-    }
-    .btn-link-arrow i {
-        margin-left: 8px;
-    }
+    .feature-item { margin-bottom: 3rem; padding: 1.5rem; border-left: 2px solid #333; transition: 0.3s; }
+    .feature-item:hover { border-left-color: #FF7E00; padding-left: 2rem; }
+    .feature-item.align-right { text-align: right; border-left: none; border-right: 2px solid #333; }
+    .feature-item.align-right:hover { border-right-color: #FF7E00; padding-right: 2rem; padding-left: 1.5rem; }
+    .feature-icon { font-size: 1.8rem; color: #FF7E00; margin-bottom: 15px; display: block; }
+    .feature-title { color: #fff; font-weight: 700; text-transform: uppercase; font-size: 1.1rem; margin-bottom: 5px; }
+    .feature-desc { color: #777; font-size: 0.9rem; line-height: 1.5; margin: 0; }
+    .model-viewer-container { height: 500px; width: 100%; background-color: #000000; display: flex; align-items: center; justify-content: center; }
+    model-viewer { width: 100%; height: 100%; --poster-color: transparent; }
 
-    /* ============================================= */
-    /* 3. CSS DÒNG XE NỔI BẬT (Card) */
-    /* ============================================= */
-    .section-padding {
-        /* Đây là class chuẩn cho các section */
-        padding: 120px 0;
-    }
-    .featured-models-section {
-        background-color: var(--color-background);
-    }
-    .mclaren-card {
-        background-color: var(--color-surface);
-        border: 1px solid var(--color-border);
-        border-radius: 12px;
-        overflow: hidden;
-        transition: transform 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-    }
-    .mclaren-card:hover {
-        transform: translateY(-8px);
-        box-shadow: 0 20px 40px rgba(0,0,0, 0.5);
-        border-color: var(--color-mclaren-orange); /* Thêm hiệu ứng viền cam */
-    }
-    .mclaren-card .card-img-top {
-        height: 250px;
-        object-fit: cover;
-        transition: transform 0.5s ease;
-    }
-    .mclaren-card:hover .card-img-top {
-        transform: scale(1.05);
-    }
-    .mclaren-card .card-body {
-        padding: 1.5rem;
-    }
-    .mclaren-card .card-title {
-        color: var(--color-mclaren-orange);
-        font-size: 1.5rem;
-        font-weight: 800;
-    }
-    .mclaren-card .card-text {
-        color: var(--color-text-secondary);
-    }
-    
-    /* Chung: Tiêu đề section */
-    .section-title-container {
-        text-align: center;
-        margin-bottom: 80px;
-    }
-    .section-title-container h2 {
-        font-size: clamp(2.5rem, 5vw, 4.5rem);
-        font-weight: 900;
-        color: var(--color-text-primary);
-        line-height: 1.1;
-    }
-    .section-title-container .lead {
-        font-size: 1.2rem;
-        color: var(--color-text-secondary);
-        max-width: 700px;
-        margin: 1rem auto 0;
-    }
-
-    /* ============================================= */
-    /* 4. CSS RACING DNA (Di sản) */
-    /* ============================================= */
-    .racing-dna-section {
-        background-color: #0f0f0f;
-    }
-    .racing-dna-section .content-box {
-        background-color: var(--color-surface);
-        padding: clamp(2rem, 5vw, 4rem); /* Responsive padding */
-        border-radius: 12px;
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-    }
-    .racing-dna-section img {
-        border-radius: 12px;
-        object-fit: cover;
-        height: 100%;
-        max-height: 500px; /* Giới hạn chiều cao ảnh */
-        width: 100%;
-    }
-    
-    /* ============================================= */
-    /* 5. CSS MSO (Độc bản - Parallax) */
-    /* ============================================= */
-    .mso-section {
-        /* Hiệu ứng Parallax */
-        background-image: url("{{ asset('images/mso-hero.jpg') }}");
-        background-attachment: fixed;
-        background-position: center;
-        background-repeat: no-repeat;
-        background-size: cover;
-        position: relative;
-    }
-    .mso-section::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0,0,0,0.7); /* Lớp phủ tối */
-    }
-    .mso-section .container {
-        position: relative;
-        z-index: 2;
-    }
-    .mso-section .lead {
-        font-size: 1.25rem;
-        max-width: 800px;
-    }
-    
-    /* ============================================= */
-    /* 6. CSS DỊCH VỤ */
-    /* ============================================= */
-    .service-section {
-        background-color: var(--color-background);
-    }
-    .service-card {
-        background-color: var(--color-surface);
-        border: 1px solid var(--color-border);
-        border-radius: 12px;
-        padding: 2.5rem;
-        transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
-        height: 100%;
-    }
-    .service-card:hover {
-        transform: translateY(-8px);
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-        border-color: var(--color-mclaren-orange);
-    }
-    .service-card .icon {
-        font-size: 2.5rem;
-        color: var(--color-mclaren-orange);
-        margin-bottom: 1.5rem;
+    /* --- MSO PARALLAX --- */
+    .mso-bg {
+        background-image: url("{{ asset('images/senna-1.jpg') }}"); 
+        background-attachment: fixed; background-size: cover; position: relative; padding: 180px 0; text-align: center;
     }
 </style>
 @endpush
 
 @section('content')
 
-    <section class="hero-video-section" aria-label="Hero section">
-    <img id="hero-video" src="{{ asset('images/750s.webp') }}" alt="McLaren 750S background">
+    {{-- HERO SECTION (DỮ LIỆU ĐỘNG) --}}
+    <section class="hero-wrap">
+        @if(isset($heroCar) && $heroCar)
+            <img id="hero-bg" src="{{ asset($heroCar->image_url) }}" alt="{{ $heroCar->name }}">
+            <div class="hero-shade"></div>
+            <div class="hero-txt">
+                <span class="hero-sub">The New Benchmark</span>
+                <h1 class="hero-h1">McLaren {{ $heroCar->name }}</h1>
+                <p class="d-none d-md-block mb-5 fs-5 text-white-50 fw-light">{{ $heroCar->description }}</p>
+                <a href="{{ route('car.details', ['modelKey' => $heroCar->model_key]) }}" class="btn-mc">Khám Phá Ngay</a>
+            </div>
+        @else
+            {{-- Fallback nếu không tìm thấy xe 750s trong DB --}}
+            <div class="hero-txt">
+                <h1 class="hero-h1">MCLAREN</h1>
+                <p class="mb-5 fs-5 text-white-50">Performance Amplified.</p>
+                <a href="{{ route('cars') }}" class="btn-mc">Xem Bộ Sưu Tập</a>
+            </div>
+        @endif
+    </section>
 
-    <div class="hero-overlay" aria-hidden="true"></div>
-
-    <div class="hero-content reveal" role="region" aria-label="Hero content">
-        <span class="tagline">Benchmark Supercar</span>
-        <h1>McLaren 750S</h1>
-        <p class="d-none d-md-block">Định nghĩa mới về hiệu suất thuần khiết và trải nghiệm lái xe không đối thủ. Đây là chuẩn mực mới.</p>
-        {{-- SỬA LỖI: Dùng 'car' thay vì 'model' --}}
-        <a href="{{ route('car.details', ['modelKey' => '750s']) }}" class="btn btn-mclaren btn-lg mt-3" aria-label="Khám Phá 750S">Khám Phá 750S</a>
-    </div>
-</section>
-
-
-    <section class="featured-models-section section-padding">
-        <div class="container py-lg-5">
-            <div class="section-title-container reveal">
-                <h2>Khám Phá Các Dòng Xe</h2>
-                <p class="lead">Từ đường đua đến đường phố, mỗi chiếc xe đều mang trong mình DNA của hiệu suất thuần khiết.</p>
+    {{-- FEATURED MODELS (DỮ LIỆU ĐỘNG) --}}
+    <section class="section-gap bg-black">
+        <div class="container">
+            <div class="text-center mb-5 reveal">
+                <span class="text-warning fw-bold text-uppercase ls-2">Bộ Sưu Tập</span>
+                <h2 class="text-white display-3 fw-bold mt-2">DÒNG XE NỔI BẬT</h2>
             </div>
             
             <div class="row g-4">
+                @foreach($featuredCars as $car)
                 <div class="col-lg-4 col-md-6 reveal">
-                    <div class="mclaren-card h-100">
-                        <img src="{{ asset('images/750s.webp') }}" class="card-img-top" alt="McLaren 750S">
-                        <div class="card-body d-flex flex-column">
-                            <h5 class="card-title">McLaren 750S</h5>
-                            <p class="card-text flex-grow-1">Sự tiến hóa của một huyền thoại. Nhẹ nhất, mạnh nhất trong series.</p>
-                            {{-- SỬA LỖI: Dùng 'car' thay vì 'model' --}}
-                            <a href="{{ route('car.details', ['modelKey' => '750s']) }}" class="btn btn-mclaren-outline mt-auto">Xem chi tiết</a>
+                    <div class="lux-card">
+                        <img src="{{ asset($car->image_url) }}" alt="{{ $car->name }}">
+                        <div class="card-body">
+                            <h4 class="card-title">{{ $car->name }} {{ $car->series }}</h4>
+                            <p class="card-desc">{{ Str::limit($car->slogan, 60) }}</p>
+                            <a href="{{ route('car.details', ['modelKey' => $car->model_key]) }}" class="btn-outline-mc">Chi Tiết</a>
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-4 col-md-6 reveal">
-                    <div class="mclaren-card h-100">
-                        <img src="{{ asset('images/artura-2.jpg') }}" class="card-img-top" alt="McLaren Artura">
-                        <div class="card-body d-flex flex-column">
-                            <h5 class="card-title">McLaren Artura</h5>
-                            <p class="card-text flex-grow-1">Cách mạng hybrid. Hiệu suất điện khí hóa thế hệ mới.</p>
-                            {{-- SỬA LỖI: Dùng 'car' thay vì 'model' --}}
-                            <a href="{{ route('car.details', ['modelKey' => 'artura']) }}" class="btn btn-mclaren-outline mt-auto">Xem chi tiết</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6 reveal">
-                    <div class="mclaren-card h-100">
-                        <img src="{{ asset('images/gt-1.jpg') }}" class="card-img-top" alt="McLaren GTS">
-                        <div class="card-body d-flex flex-column">
-                            <h5 class="card-title">McLaren GTS</h5>
-                            <p class="card-text flex-grow-1">Sang trọng, linh hoạt. Một con quái thú trong làng siêu xe.</p>
-                            {{-- SỬA LỖI: Dùng 'car' thay vì 'model'. *Lưu ý: GTS không có trong data mẫu, dùng gt nếu cần* --}}
-                            <a href="{{ route('car.details', ['modelKey' => 'gt']) }}" class="btn btn-mclaren-outline mt-auto">Xem chi tiết</a>
-                        </div>
-                    </div>
-                </div>
+                @endforeach
             </div>
+            
             <div class="text-center mt-5 reveal">
-                <a href="{{ route('cars') }}" class="btn btn-mclaren btn-lg">Xem Tất Cả Dòng Xe</a>
+                <a href="{{ route('cars') }}" class="btn-mc px-5 py-3">Xem Tất Cả Dòng Xe</a>
             </div>
         </div>
     </section>
 
-    <section class="interactive-3d-showcase">
-        <div class="container-fluid px-lg-5"> <div class="showcase-title-container reveal">
-                <span class="tagline">Di Sản Longtail</span>
-                <h2>Khám Phá Từ Mọi Góc Độ</h2>
+    {{-- 3D MODEL SECTION (GIỮ NGUYÊN TĨNH MẪU 600LT ĐỂ SHOWCASE) --}}
+    <section class="section-3d-black">
+        <div class="container">
+            <div class="text-center mb-5 reveal">
+                <span class="text-warning fw-bold text-uppercase ls-2">Di Sản Đường Đua</span>
+                <h2 class="text-white display-4 fw-bold mt-2">KHÁM PHÁ 600LT</h2>
+                <p class="text-secondary">Trải nghiệm chi tiết mẫu xe Longtail huyền thoại từ mọi góc độ.</p>
             </div>
 
             <div class="row align-items-center">
-                
-                <div class="col-lg-3 feature-column reveal">
-                    <div class="feature-item">
-                        <div class="icon"><i class="fas fa-feather-alt"></i></div>
-                        <h4>Trọng Lượng Siêu Nhẹ</h4>
-                        <p>Với 1,247kg, 600LT là đỉnh cao của triết lý tối ưu hóa trọng lượng, sử dụng rộng rãi sợi carbon.</p>
+                {{-- LEFT COLUMN --}}
+                <div class="col-lg-3 reveal">
+                    <div class="feature-item align-right">
+                        <i class="fas fa-feather-alt feature-icon"></i>
+                        <div class="feature-title">Trọng Lượng Siêu Nhẹ</div>
+                        <p class="feature-desc">Chỉ 1,247kg nhờ khung gầm MonoCell II và thân vỏ sợi carbon.</p>
                     </div>
-                    <div class="feature-item">
-                        <div class="icon"><i class="fas fa-wind"></i></div>
-                        <h4>Khí Động Học Longtail</h4>
-                        <p>Cánh gió sau cố định và bộ khuếch tán lớn tạo ra 100kg lực ép ở 250km/h.</p>
+                    <div class="feature-item align-right">
+                        <i class="fas fa-wind feature-icon"></i>
+                        <div class="feature-title">Khí Động Học</div>
+                        <p class="feature-desc">Cánh gió cố định tạo ra 100kg lực ép xuống mặt đường ở 250km/h.</p>
                     </div>
                 </div>
 
+                {{-- CENTER MODEL --}}
                 <div class="col-lg-6 reveal">
-                    <div class="model-viewer-wrapper">
+                    <div class="model-viewer-container">
                         <model-viewer 
                             src="{{ asset('models/2019_mclaren_600lt.glb') }}" 
-                            alt="Mô hình 3D của McLaren 600LT"
-                            camera-controls 
-                            auto-rotate
-                            ar
-                            shadow-intensity="1.5"
-                            exposure="1.1"
-                            poster="https://placehold.co/1200x800/000/FF7E00?text=Đang+tải+mô+hình+3D+McLaren+600LT...">
+                            camera-controls auto-rotate ar shadow-intensity="2"
+                            camera-orbit="45deg 75deg 105%" style="background-color: #000000;"
+                            poster="{{ asset('images/600lt-1.jpg') }}">
                         </model-viewer>
                     </div>
-                </div>
-
-                <div class="col-lg-3 feature-column right-col reveal">
-                    <div class="feature-item align-right">
-                        <div class="icon"><i class="fas fa-cogs"></i></div>
-                        <h4>Động Cơ 3.8L V8</h4>
-                        <p>600PS và 620Nm mô-men xoắn. Trái tim của 600LT mang lại hiệu suất đáng kinh ngạc.</p>
-                    </div>
-                    <div class="feature-item align-right">
-                        <div class="icon"><i class="fas fa-fire"></i></div>
-                        <h4>Ống Xả Top-Exit</h4>
-                        <p>Thiết kế ống xả đặt trên đỉnh độc đáo không chỉ giảm trọng lượng mà còn tạo ra âm thanh đặc trưng.</p>
+                    <div class="text-center mt-4">
+                        <a href="{{ route('car.details', ['modelKey' => '600lt']) }}" class="text-white text-decoration-none fw-bold text-uppercase ls-2" style="font-size: 0.9rem;">
+                            Xem Chi Tiết 600LT <i class="fas fa-arrow-right ms-2 text-warning"></i>
+                        </a>
                     </div>
                 </div>
 
-            </div> <div class="showcase-cta reveal">
-                {{-- SỬA LỖI: Dùng 'car' thay vì 'model' --}}
-                   <a href="{{ route('car.details', ['modelKey' => '600lt']) }}" class="btn-link-arrow">
-                    Tìm hiểu chi tiết về 600LT <i class="fas fa-arrow-right"></i>
-                </a>
-            </div>
-
-        </div> </section>
-
-    <section class="racing-dna-section section-padding">
-        <div class="container py-lg-5">
-            <div class="row g-5 align-items-center">
-                <div class="col-lg-6 reveal">
-                    <img src="{{ asset('images/mclaren-f1.jpg') }}" alt="Xe đua McLaren F1" class="img-fluid w-100">
-                </div>
-                <div class="col-lg-6 reveal">
-                    <div class="content-box">
-                        <span class="tagline">Di Sản Đua Xe</span>
-                        <h2 class="display-5 mb-4">Sinh Ra Từ Đường Đua</h2>
-                        <p class="text-secondary fs-5 mb-4">
-                            Từ Công thức 1 đến Le Mans, tinh thần cạnh tranh là cốt lõi của mọi chiếc xe chúng tôi tạo ra.
-                        </p>
-                        <p class="text-secondary">
-                            Chúng tôi không chỉ áp dụng công nghệ F1 - chúng tôi sinh ra từ nó. Mỗi siêu xe đều được thừa hưởng sự chính xác, khí động học và hiệu suất đỉnh cao.
-                        </p>
-                        <a href="#" class="btn btn-mclaren-outline mt-4">Khám Phá Di Sản</a>
-                        
+                {{-- RIGHT COLUMN --}}
+                <div class="col-lg-3 reveal">
+                    <div class="feature-item">
+                        <i class="fas fa-tachometer-alt feature-icon"></i>
+                        <div class="feature-title">Động Cơ V8 Twin-Turbo</div>
+                        <p class="feature-desc">Sức mạnh 600PS và 620Nm mô-men xoắn. Tăng tốc 0-100km/h trong 2.9s.</p>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-fire feature-icon"></i>
+                        <div class="feature-title">Ống Xả Top-Exit</div>
+                        <p class="feature-desc">Thiết kế ống xả đặt trên đỉnh độc đáo, giảm trọng lượng và tăng uy lực.</p>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <section class="mso-section section-padding">
-        <div class="container text-center text-white py-lg-5">
-            <div class="row justify-content-center">
-                <div class="col-lg-9 reveal">
-                    <span class="tagline">McLaren Special Operations</span>
-                    <h2 class="display-3 mb-4">Tầm Nhìn Của Bạn. <br> Sứ Mệnh Của Chúng Tôi.</h2>
-                    <p class="lead mb-5">
-                        MSO là nơi biến điều không thể thành có thể. Từ một chi tiết carbon độc đáo đến một chiếc xe "one-off" hoàn toàn, nếu bạn có thể mơ ước, chúng tôi có thể tạo ra.
-                    </p>
-                    <a href="#" class="btn btn-mclaren btn-lg">Khám Phá MSO</a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="service-section section-padding">
-        <div class="container py-lg-5">
-            <div class="section-title-container reveal">
-                <h2>Trải Nghiệm Sở Hữu</h2>
-                <p class="lead">Dịch vụ vượt trội dành cho cỗ máy của bạn. Cam kết của chúng tôi kéo dài suốt vòng đời chiếc xe.</p>
-            </div>
-            <div class="row g-4">
-                <div class="col-lg-4 col-md-6 reveal">
-                    <div class="service-card">
-                        <div class="icon"><i class="fas fa-tools"></i></div>
-                        <h4>Dịch Vụ & Bảo Dưỡng</h4>
-                        <p class="text-secondary">Được thực hiện bởi các kỹ thuật viên được đào tạo chuyên sâu bởi McLaren. Đảm bảo hiệu suất tối ưu.</p>
-                        <a href="#" class="btn-link-arrow mt-3">Tìm Hiểu Thêm</a>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6 reveal">
-                    <div class="service-card">
-                        <div class="icon"><i class="fas fa-car-side"></i></div>
-                        <h4>Phụ Kiện Chính Hãng</h4>
-                        <p class="text-secondary">Nâng cấp và cá nhân hóa chiếc xe của bạn với các phụ kiện MSO và chính hãng McLaren.</p>
-                        <a href="#" class="btn-link-arrow mt-3">Khám Phá Phụ Kiện</a>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6 reveal">
-                    <div class="service-card">
-                        <div class="icon"><i class="fas fa-calendar-check"></i></div>
-                        <h4>Đặt Lịch Hẹn</h4>
-                        <p class="text-secondary">Dễ dàng đặt lịch hẹn dịch vụ trực tuyến tại đại lý gần nhất của bạn.</p>
-                        <a href="{{ route('retailers') }}" class="btn-link-arrow mt-3">Đặt Lịch Ngay</a>
-                    </div>
-                </div>
-            </div>
+    {{-- MSO PARALLAX --}}
+    <section class="mso-bg">
+        <div style="position:absolute; inset:0; background:rgba(0,0,0,0.85);"></div>
+        <div class="container position-relative reveal">
+            <span class="text-warning fw-bold fs-4 ls-2">MSO</span>
+            <h2 class="text-white display-3 fw-bold my-3">KHÔNG GIỚI HẠN</h2>
+            <p class="text-light lead mx-auto opacity-75 mb-5" style="max-width:700px; font-weight:300;">
+                McLaren Special Operations (MSO) biến giấc mơ độc bản của bạn thành hiện thực. Màu sắc, vật liệu, hiệu suất - tất cả đều theo ý bạn.
+            </p>
+            <a href="{{ route('mso') }}" class="btn-mc">Tìm Hiểu Thêm</a>
         </div>
     </section>
 
 @endsection
 
 @push('scripts')
-    <script typeR="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
-
+    <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
     <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        
-        // --- Logic cho Hiệu ứng Reveal on Scroll ---
-        const revealElements = document.querySelectorAll('.reveal');
-        if (revealElements.length > 0) {
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.style.opacity = 1;
-                        entry.target.style.transform = 'translateY(0)';
-                        observer.unobserve(entry.target);
-                    }
-                });
-            }, { threshold: 0.1 }); // Kích hoạt khi 10% phần tử hiển thị
-
-            revealElements.forEach(el => {
-                el.style.opacity = 0;
-                el.style.transform = 'translateY(30px)';
-                el.style.transition = 'opacity 0.8s ease-out, transform 0.8s ease-out';
-                observer.observe(el);
+        // Reveal Animation
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(e => {
+                if(e.isIntersecting) {
+                    e.target.style.opacity = 1; e.target.style.transform = 'translateY(0)';
+                }
             });
-        }
-    });
+        }, { threshold: 0.15 });
+
+        document.querySelectorAll('.reveal').forEach(el => {
+            el.style.opacity = 0; el.style.transform = 'translateY(40px)';
+            el.style.transition = 'all 1s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+            observer.observe(el);
+        });
     </script>
 @endpush

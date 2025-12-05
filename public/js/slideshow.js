@@ -1,30 +1,30 @@
-// JavaScript External - Các script xử lý sự kiện chung
+
 document.addEventListener('DOMContentLoaded', () => {
     // --------------------------------------------------------------------------
     // Logic 1: Xử lý Navbar khi cuộn trang (Sticky Navbar & Ẩn/Hiện)
     // --------------------------------------------------------------------------
     const navbar = document.querySelector('header .navbar');
-    // Khai báo lại lastScrollTop để đảm bảo nó là local scope cho logic này
+    
     let lastScrollTop = 0; 
     
-    // Đảm bảo Navbar có thể di chuyển (Nếu không dùng Bootstrap fixed-top)
+   
     if (navbar && navbar.style.position === 'fixed') {
         window.addEventListener('scroll', () => {
             const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
     
-            // Thêm/Xóa class 'scrolled' cho hiệu ứng thay đổi style
+           
             if (scrollTop > 50) {
                 navbar.classList.add('scrolled');
             } else {
                 navbar.classList.remove('scrolled');
             }
     
-            // Logic ẩn/hiện Navbar khi cuộn lên/xuống (Dựa trên code gốc)
+           
             if (scrollTop > lastScrollTop) {
-                // Đang cuộn xuống (ẩn Navbar)
+                
                 navbar.style.transform = 'translateY(-100%)'; 
             } else {
-                // Đang cuộn lên (hiện Navbar)
+                
                 navbar.style.transform = 'translateY(0)';
             }
     
@@ -39,15 +39,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const themeToggle = document.getElementById('theme-toggle');
     const body = document.body;
 
-    // Lấy theme đã lưu (mặc định là dark-theme)
+    
     const currentTheme = localStorage.getItem('theme') || 'dark-theme';
     body.classList.add(currentTheme);
     
-    // Kiểm tra nếu nút theme tồn tại
+    
     if (themeToggle) {
-        updateThemeIcon(currentTheme); // Cập nhật icon ban đầu
+        updateThemeIcon(currentTheme);
 
-        // Sự kiện click nút chuyển đổi
+       
         themeToggle.addEventListener('click', () => {
             if (body.classList.contains('dark-theme')) {
                 body.classList.replace('dark-theme', 'light-theme');
@@ -75,7 +75,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Logic 3: Xử lý Slideshow Hero Section
     // --------------------------------------------------------------------------
     const slideshow = document.getElementById('hero-slideshow');
-    // Thoát nếu không phải trang có Slideshow
+    
     if (!slideshow) return;
 
     const slides = slideshow.querySelectorAll('.slide');
